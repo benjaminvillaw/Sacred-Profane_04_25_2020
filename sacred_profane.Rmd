@@ -15,7 +15,6 @@ library(tidyverse)
 library(haven)
 library(ggplot2)
 library(infer)
-library(dplyr)
 library(gt)
 library(tidyr)
 library(readr)
@@ -34,6 +33,8 @@ library(readxl)
 library(naniar)
 library(janitor)
 library(choroplethr)
+library(dbplyr)
+
 
 
 # https://shiny.rstudio.com/articles/layout-guide.html
@@ -351,6 +352,14 @@ Benjamin Villa Wiesner, a student in the Master in Design Engineering program at
 
 # https://www.citylab.com/equity/2013/04/americas-most-and-least-religious-metro-areas/5180/
 
+
+mutate(region = case_when(
+        state %in% c("CT", "MA", "ME", "NH", "RI", "VT", "NJ", "NY", "PA") ~ "Northeast",
+        state %in% c("IL", "IN", "MI", "OH", "WI", "IA", "KS", "MN", "MO", "NE", "ND", "SD") ~ "Midwest",
+        state %in% c("DC", "DE", "FL", "GA", "MD", "NC", "SC", "VA", "WV", "AL", "KY", "MS", "TN", "AR", 
+                     "LA", "OK", "TX") ~ "South",
+        state %in% c("AZ", "CO", "ID", "MT", "NV", "NM", "UT", "WY", "AK", "CA", "HI", "OR", "WA") ~ "West")
+    ) %>%
 
 ```
 

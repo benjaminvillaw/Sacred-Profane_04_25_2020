@@ -1,28 +1,8 @@
-library(infer)
-library(skimr)
-library(broom)
-library(gganimate)
+
 library(tidyverse)
-library(haven)
 library(ggplot2)
-library(infer)
-library(dplyr)
-library(gt)
-library(readr)
-library(purrr)
-library(tibble)
-library(stringr)
-library(forcats)
-library(tidyselect)
-library(fivethirtyeight)
-library(devtools)
-library(patchwork)
-library(broom)
-library(scales)
-library(readxl)
-library(naniar)
-library(janitor)
-library(choroplethr)
+library(shiny)
+library(dbplyr)
 library(shinythemes)
 
 
@@ -35,9 +15,6 @@ data5 <- read_rds("dep_religion.rds")
 ui <- fluidPage(
     
     theme = shinytheme("lumen"),
-    
-    imageOutput("cover_images/image_cross.jpg", width = "100%", height = "100%"), br(),
-    
     
     navbarPage(
     "The Sacred and the Profane: The Role of Medicine and Religion on Mental Health",
@@ -67,11 +44,24 @@ ui <- fluidPage(
     
     tabPanel("Discussion",
              titlePanel("Discussion Title"),
-             h3("The following project attempts to see if the number of psychiatrists 
+             h4("The following project attempts to see if the number of psychiatrists 
            per capita declines in counties where there is an abundant number of 
            clergy per capita. Additionally, the project attempts to look for patterns,
            correlates, and distributions of clergy and of psychiatrists per 
            capita throughout the United States.")),
+            h5("Considering:
+               
+               -Income Levels
+               -Jobs related to Relgion, Psychiatrits, Psychologists & Social Work
+               -Depression Rates
+               -Social Well Being Index
+               -Religion Importance Survey
+               -Religious Attendance Frequency
+               -Hours Spent Socially
+               -Quality of Social Relationships
+               
+               
+               "),
     
     
     
@@ -179,7 +169,7 @@ server <- function(input, output, session) {
         
         output$graph5 <- renderPlot({
             dep_religion %>%
-                ggplot(aes(jobs_1000_orig,yes))+ geom_point() + geom_smooth(method = "lm", formula = jobs_1000_orig ~ yes, se = FALSE) +
+                ggplot(aes(jobs_1000_orig,yes))+ geom_point() + geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
                 scale_y_log10() + scale_x_log10()+
                 labs(x= "Religion Employment per 1000 ", y = "Diagnosed Depression", 
                      title = "Religion vs Depression Across Counties") +

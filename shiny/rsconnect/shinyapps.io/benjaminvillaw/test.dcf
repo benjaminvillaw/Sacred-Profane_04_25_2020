@@ -1,0 +1,12 @@
+name: test
+title: test
+username:
+account: benjaminvillaw
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2201961
+bundleId: 3077101
+url: https://benjaminvillaw.shinyapps.io/test/
+when: 1588084555.3143
+asMultiple: FALSE
+asStatic: FALSE
