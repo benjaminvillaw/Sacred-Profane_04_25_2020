@@ -1,4 +1,3 @@
-library(shiny)
 library(infer)
 library(skimr)
 library(broom)
@@ -24,9 +23,8 @@ library(broom)
 library(scales)
 library(readxl)
 library(naniar)
-library(plotly)
-library(shinythemes)
-
+library(janitor)
+library(choroplethr)
 
 
 data1 <- read_rds("income_jobs.rds")
@@ -182,7 +180,7 @@ server <- function(input, output, session) {
         
         output$graph5 <- renderPlot({
             dep_religion %>%
-                ggplot(aes(jobs_1000_orig,yes))+ geom_point() + geom_smooth(method = "lm", se = FALSE)+
+                ggplot(aes(jobs_1000_orig,yes))+ geom_point() +
                 scale_y_log10() + scale_x_log10()+
                 labs(x= "Religion Employment per 1000 ", y = "Diagnosed Depression", 
                      title = "Religion vs Depression Across Counties") +
