@@ -8,7 +8,6 @@ library(ggplot2)
 library(infer)
 library(dplyr)
 library(gt)
-library(tidyr)
 library(readr)
 library(purrr)
 library(tibble)
@@ -17,7 +16,6 @@ library(forcats)
 library(tidyselect)
 library(fivethirtyeight)
 library(devtools)
-library(ggplot2)
 library(patchwork)
 library(broom)
 library(scales)
@@ -25,6 +23,7 @@ library(readxl)
 library(naniar)
 library(janitor)
 library(choroplethr)
+library(shinythemes)
 
 
 data1 <- read_rds("income_jobs.rds")
@@ -137,7 +136,7 @@ server <- function(input, output, session) {
     output$graph1 <- renderPlot({
        income_jobs %>%
             filter(income_2018.x<input$income) %>%
-            ggplot(aes(jobs_1000_orig.x,jobs_1000_orig.y, color=income_2018.x))+ geom_point() + geom_smooth(method = "lm", se = FALSE)+
+            ggplot(aes(jobs_1000_orig.x,jobs_1000_orig.y, color=income_2018.x))+ geom_point() + geom_smooth(method = "lm", formula = y ~ x, se = FALSE)+
             scale_y_log10() + scale_x_log10() +
             labs(x= "Religion Employment per 1000 ", y = "Psych Employmnet per 1000", 
                  title = "Religion vs Psychiatrist Across Counties") +
@@ -146,7 +145,7 @@ server <- function(input, output, session) {
         
         output$graph2 <- renderPlot({
             religion_social %>%
-                ggplot(aes(jobs_1000_orig.x,jobs_1000_orig.y,color=tot_emp.x))+ geom_point() + geom_smooth(method = "lm", se = FALSE)+
+                ggplot(aes(jobs_1000_orig.x,jobs_1000_orig.y,color=tot_emp.x))+ geom_point() + geom_smooth(method = "lm",formula = y ~ x, se = FALSE)+
                 scale_y_log10() + scale_x_log10()+
                 labs(x= "Religion Employment per 1000 ", y = "Social Workers", 
                      title = "Religion vs Social Workers Across Counties") +
@@ -156,7 +155,7 @@ server <- function(input, output, session) {
        
         output$graph3 <- renderPlot({
             psych_social %>%
-                ggplot(aes(jobs_1000_orig.x,jobs_1000_orig.y,color=tot_emp.x))+ geom_point() + geom_smooth(method = "lm", se = FALSE)+
+                ggplot(aes(jobs_1000_orig.x,jobs_1000_orig.y,color=tot_emp.x))+ geom_point() + geom_smooth(method = "lm", formula = y ~ x, se = FALSE)+
                 scale_y_log10() + scale_x_log10()+
                 labs(x= "Psych Employment per 1000 ", y = "Social Workers", 
                      title = "Psych vs Social Workers Across Counties") +
@@ -168,7 +167,7 @@ server <- function(input, output, session) {
         
         output$graph4 <- renderPlot({
             dep_psych %>%
-                ggplot(aes(jobs_1000_orig,yes))+ geom_point() + geom_smooth(method = "lm", se = FALSE)+
+                ggplot(aes(jobs_1000_orig,yes))+ geom_point() + geom_smooth(method = "lm", formula = y ~ x, se = FALSE)+
                 scale_y_log10() + scale_x_log10()+
                 labs(x= "Psych Employment per 1000 ", y = "Diagnosed Depression", 
                      title = "Psych vs Depression Across Counties") +
@@ -180,7 +179,7 @@ server <- function(input, output, session) {
         
         output$graph5 <- renderPlot({
             dep_religion %>%
-                ggplot(aes(jobs_1000_orig,yes))+ geom_point() +
+                ggplot(aes(jobs_1000_orig,yes))+ geom_point() + geom_smooth(method = "lm", formula = jobs_1000_orig ~ yes, se = FALSE) +
                 scale_y_log10() + scale_x_log10()+
                 labs(x= "Religion Employment per 1000 ", y = "Diagnosed Depression", 
                      title = "Religion vs Depression Across Counties") +

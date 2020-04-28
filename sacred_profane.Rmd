@@ -35,6 +35,7 @@ library(naniar)
 library(janitor)
 library(choroplethr)
 
+
 # https://shiny.rstudio.com/articles/layout-guide.html
 
 
@@ -119,7 +120,7 @@ write_rds(psych_social,"shiny/psych_social.rds")
 
 
 graph_jobs_income <- income_jobs %>%
-ggplot(aes(jobs_1000_orig.x,jobs_1000_orig.y, color=income_2018.x))+ geom_point() + geom_smooth(method = "lm", se = FALSE)+
+ggplot(aes(jobs_1000_orig.x,jobs_1000_orig.y, color=income_2018.x))+ geom_point() + geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
   scale_y_log10() + scale_x_log10()
 
 
@@ -141,14 +142,15 @@ ggplot(aes(jobs_1000_orig.x,jobs_1000_orig.y,color=tot_emp.x))+ geom_point() + g
 
 ```{r Depression}
 
-depression <- depression %>%
+depression2 <- depression %>%
   clean_names() %>%
   select(geography,yes,time) %>%
   filter(time==2016) %>%
-  rename(area_title = geography)
+  rename(area_title = geography) %>%
+  arrange(desc(yes))
 
-depression %>%
-ggplot(aes(area_title,yes)) + geom_col(position = position_stack(reverse = TRUE))
+depression2 %>%
+ggplot(aes(yes)) + geom_histogram()
 
 
 
@@ -156,8 +158,11 @@ ggplot(aes(area_title,yes)) + geom_col(position = position_stack(reverse = TRUE)
 
 ```{r Depression + Religion}
 
-dep_religion <- inner_join(jobs_religion, depression, by= "area_title")
+dep_religion <- inner_join(jobs_religion, depression2, by= "area_title")
 write_rds(dep_religion,"shiny/dep_religion.rds")
+
+
+model <- lm(jobs_1000_orig~yes, data = dep_religion)
 
 ```
 

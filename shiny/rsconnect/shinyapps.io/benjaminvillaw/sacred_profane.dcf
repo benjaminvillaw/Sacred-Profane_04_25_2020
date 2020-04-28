@@ -5,9 +5,9 @@ account: benjaminvillaw
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2187126
-bundleId: 3075355
+bundleId: 3075578
 url: https://benjaminvillaw.shinyapps.io/sacred_profane/
-when: 1588051875.82699
+when: 1588055586.66177
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: cover_images/image_cross.jpg|cover_images/image_light.jpg|cover_images/image_roof.jpg
+ignoredFiles: dep_psych.rds|dep_religion.rds|income_jobs.rds|psych_social.rds|religion_social.rds|cover_images/image_cross.jpg|cover_images/image_light.jpg|cover_images/image_roof.jpg
