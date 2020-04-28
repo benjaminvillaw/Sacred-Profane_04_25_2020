@@ -147,7 +147,10 @@ depression <- depression %>%
   filter(time==2016) %>%
   rename(area_title = geography)
 
-depression
+depression %>%
+ggplot(aes(area_title,yes)) + geom_col(position = position_stack(reverse = TRUE))
+
+
 
 ```
 
@@ -170,7 +173,10 @@ write_rds(dep_psych,"shiny/dep_psych.rds")
 
 
 
-```{r Depression + Social}
+```{r Depression Counties}
+
+
+
 
 ```
 
