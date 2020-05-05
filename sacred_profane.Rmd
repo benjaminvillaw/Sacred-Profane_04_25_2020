@@ -33,7 +33,6 @@ library(readxl)
 library(naniar)
 library(janitor)
 library(choroplethr)
-library(plyr)
 library(dbplyr)
 
 
@@ -103,7 +102,6 @@ religion_important <- religion_important %>%
   filter(time==2016) %>%
   select(geography,yes)
 
-
 church_frequency <- church_frequency %>%
  clean_names() %>%
   filter(time==2010) %>%
@@ -115,18 +113,15 @@ church_frequency <- church_frequency %>%
 
 joined_gallup <- left_join(socialwell_index,social_hours, by="geography") %>%
   left_join(religion_important, by = "geography") %>%
-  left_join(church_frequency, by = "geography")
-
-joined_gallup %>%
-  rename(value.x=as)
-
-
-
+  left_join(church_frequency, by = "geography") %>%
+  rename(area_title = geography) %>%
+  rename(social_index = value.x) %>%
+  rename(social_hours = value.y) %>%
+  rename(religion_imp = yes) %>%
+  rename(church_week = at_least_once_a_week) %>%
+    na.omit()
 
 ```
-
-
-
 
 
 ```{r jobs}
@@ -186,6 +181,8 @@ religion_social<- inner_join(jobs_religion,jobs_social, by= "area_title")
 psych_social <- inner_join(jobs_psych,jobs_social, by= "area_title")
 
 
+
+
 write_rds(income_jobs,"shiny/income_jobs.rds")
 write_rds(religion_social,"shiny/religion_social.rds")
 write_rds(psych_social,"shiny/psych_social.rds")
@@ -219,12 +216,28 @@ depression2 <- depression %>%
   select(geography,yes,time) %>%
   filter(time==2016) %>%
   rename(area_title = geography) %>%
-  arrange(desc(yes))
+  arrange(desc(yes)) %>%
+  select(area_title,yes)
 
 depression2 %>%
 ggplot(aes(yes)) + geom_histogram()
 
 
+joined_gallup
+
+
+test <- left_join(joined_gallup
+,depression2, by = "area_title")
+
+
+test %>%
+ ggplot(aes(church_week,yes))+ geom_point() + geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
+                scale_y_log10() + scale_x_log10()+
+                theme_classic()
+
+test %>%
+  select(church_week,yes,social_hours,religion_imp,social_index) %>%
+cor()
 
 ```
 
