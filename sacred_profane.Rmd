@@ -33,19 +33,22 @@ library(readxl)
 library(naniar)
 library(janitor)
 library(choroplethr)
+library(plyr)
 library(dbplyr)
-
 
 
 # https://shiny.rstudio.com/articles/layout-guide.html
 
+```
+
+```{r Data Read In}
 
 jobs <- read_excel("Data/jobs_2019.xlsx", sheet = NULL, range = NULL, col_names = TRUE,
   col_types = NULL, na = c("**","*","#"), trim_ws = TRUE, skip = 0,
   n_max = Inf, guess_max = min(1000, 2000),
   progress = readxl_progress(), .name_repair = "unique")
 
-income <- read_excel("Data/income_2018.xlsx", sheet = NULL, range = NULL, col_names = TRUE,
+income <- read_excel("Data/income.xlsx", sheet = NULL, range = NULL, col_names = TRUE,
   col_types = NULL, na = c("**","*","#"), trim_ws = TRUE, skip = 0,
   n_max = Inf, guess_max = min(1000, 2000),
   progress = readxl_progress(), .name_repair = "unique")
@@ -55,8 +58,76 @@ depression <-read_excel("Data/physician_depression_edit.xlsx", sheet = NULL, ran
   n_max = Inf, guess_max = min(1000, 2000),
   progress = readxl_progress(), .name_repair = "unique")
 
+```
+
+
+```{r Gallup Data Read In}
+
+socialwell_index <-read_excel("Data/social_wellbeing_index.xlsx", sheet = NULL, range = NULL, col_names = TRUE,
+  col_types = NULL, na = c("**","*","#"), trim_ws = TRUE, skip = 0,
+  n_max = Inf, guess_max = min(1000, 2000),
+  progress = readxl_progress(), .name_repair = "unique")
+
+social_hours <-read_excel("Data/hours_spent_socially.xlsx", sheet = NULL, range = NULL, col_names = TRUE,
+  col_types = NULL, na = c("**","*","#"), trim_ws = TRUE, skip = 0,
+  n_max = Inf, guess_max = min(1000, 2000),
+  progress = readxl_progress(), .name_repair = "unique")
+
+religion_important <-read_excel("Data/religion_important_GallupAnalytics.xlsx", sheet = NULL, range = NULL, col_names = TRUE,
+  col_types = NULL, na = c("**","*","#"), trim_ws = TRUE, skip = 0,
+  n_max = Inf, guess_max = min(1000, 2000),
+  progress = readxl_progress(), .name_repair = "unique")
+
+church_frequency <- read_excel("Data/church_frequency.xlsx", sheet = NULL, range = NULL, col_names = TRUE,
+  col_types = NULL, na = c("**","*","#"), trim_ws = TRUE, skip = 0,
+  n_max = Inf, guess_max = min(1000, 2000),
+  progress = readxl_progress(), .name_repair = "unique")
+
 
 ```
+
+```{r Gallup Data Clean}
+
+socialwell_index <- socialwell_index %>%
+  clean_names() %>%
+  filter(time==2016) %>%
+  select(geography,value)
+  
+social_hours <- social_hours %>%
+ clean_names() %>%
+  filter(time==2010) %>%
+  select(geography,value)
+
+religion_important <- religion_important %>%
+ clean_names() %>%
+  filter(time==2016) %>%
+  select(geography,yes)
+
+
+church_frequency <- church_frequency %>%
+ clean_names() %>%
+  filter(time==2010) %>%
+  select(geography,at_least_once_a_week)
+
+```
+
+```{r Gallup Join}
+
+joined_gallup <- left_join(socialwell_index,social_hours, by="geography") %>%
+  left_join(religion_important, by = "geography") %>%
+  left_join(church_frequency, by = "geography")
+
+joined_gallup %>%
+  rename(value.x=as)
+
+
+
+
+```
+
+
+
+
 
 ```{r jobs}
 

@@ -6,11 +6,11 @@ library(dbplyr)
 library(shinythemes)
 
 
-data1 <- read_rds("income_jobs.rds")
-data2 <- read_rds("religion_social.rds")
-data3 <- read_rds("psych_social.rds")
-data4 <- read_rds("dep_psych.rds")
-data5 <- read_rds("dep_religion.rds")
+income_jobs <- read_rds("income_jobs.rds")
+religion_social <- read_rds("religion_social.rds")
+psych_social <- read_rds("psych_social.rds")
+dep_psych <- read_rds("dep_psych.rds")
+dep_religion <- read_rds("dep_religion.rds")
 
 ui <- fluidPage(
     
