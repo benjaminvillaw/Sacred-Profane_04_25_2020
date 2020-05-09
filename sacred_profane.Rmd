@@ -1,11 +1,12 @@
 ---
-title: "The Sacred and the Profane: Religion and Mental Health in the US"
+title: "The Sacred and the Profane: Social, Religious & Medical Effects on Emotional Wellbeing"
 author: "Benjamin Villa"
-output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+# Load all the libraries
 
 library(infer)
 library(skimr)
@@ -42,12 +43,11 @@ library(choroplethrZip)
 library(ggfittext)
 library(plotly)
 
-
-# https://shiny.rstudio.com/articles/layout-guide.html
-
 ```
 
 ```{r Data Jobs + Income Read In}
+
+# Read in the data
 
 jobs_raw <- read_excel("Data/jobs_2019.xlsx", sheet = NULL, range = NULL, col_names = TRUE,
   col_types = NULL, na = c("**","*","#"), trim_ws = TRUE, skip = 0,
@@ -296,8 +296,6 @@ jobs_joined <- left_join(jobs_social,jobs_psych, by = "area_title", suffix = c("
 all_joined <-left_join(joined_gallup_income, jobs_joined, by = "area_title") %>%
    na.omit()
 
-all_joined <- all_joined %>%
-  select()
 
 write_rds(all_joined,"shiny/all_joined.rds")
 

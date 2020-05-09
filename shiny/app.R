@@ -1,11 +1,38 @@
 
+library(infer)
+library(skimr)
+library(broom)
+library(gganimate)
 library(tidyverse)
+library(haven)
 library(ggplot2)
-library(shiny)
+library(infer)
+library(gt)
+library(tidyr)
+library(readr)
+library(purrr)
+library(tibble)
+library(stringr)
+library(forcats)
+library(tidyselect)
+library(fivethirtyeight)
+library(devtools)
+library(ggplot2)
+library(patchwork)
+library(broom)
+library(scales)
+library(readxl)
+library(naniar)
+library(janitor)
+library(choroplethr)
+library(viridis)
+library(fuzzyjoin)
 library(corrplot)
-library(ggplotify)
+library(totalcensus)
+library(devtools)
+library(choroplethrZip)
+library(ggfittext)
 library(plotly)
-
 
 all_joined <- read_rds("all_joined.rds")
 all_pivot <- read_rds("all_pivot.rds")
@@ -37,7 +64,7 @@ ui <- fluidPage(
                                                    "Hours Spent Socially" = "social_hours",
                                                    "Very Weak Close Relationship" = "x1_strong_disagree_relationship",
                                                    "Very Strong Close Relationship" = "x5_strong_agree_relationship",
-                                                   "Number of Social Jobs per 1,000" = "jons_1000_orig_social"
+                                                   "Number of Social Jobs per 1,000" = "jobs_1000_orig_social"
                                                    )),  
                          
                   plotlyOutput("social_overview"),
@@ -160,7 +187,9 @@ ui <- fluidPage(
 
     tabPanel("About", 
              titlePanel("About the Project"),
-             h5("The project attempts to examine data from"),
+             h5("The project attempts to examine data from 89 Metropolitan and Micropolitan 
+                Statistical Areas in the United States in the Year 2016 to establish 
+                social, religious & medical effects on emotional wellbeing by ananlyzing differnt variables."),
              
              titlePanel("Scales"),
              h5("The project could be further developed to include other scales,
@@ -170,9 +199,31 @@ ui <- fluidPage(
              titlePanel("Data"),
              
              h5("Sources"),
-             h5("The data was gathered from 89 Metropolitan and Micropolitan Statistical Areas in the United States in the Year 2016"),
+             h5("The data was gathered from 89 Metropolitan and Micropolitan 
+                Statistical Areas in the United States in the Year 2016"),
              
-             h5("The sources for the data included:"),
+             h5("The sources for the data included:
+             
+             Gallup U.S. Dailies 2016 by Metropolitan and Micropolitan 
+                Statistical Area:
+             
+                Religion Important
+                Social Well-being Index
+                Religion Preference
+                Close Relationships
+                Depression
+                Hours Spent Socially
+                Attend Church, Synagogue, or Mosque
+                Financial Well-Being Index
+                Unemployment Index
+                Party Affiliation
+                Use Drugs/Medicine to affect Mood
+                
+             Per Capita Personal income by Metropolitan Area 2016-2018
+            
+             Employment Data from: 
+            
+                "),
              
              titlePanel("About Me"),
              h5("Benjamin Villa Wiesner, a student in the Master in Design 
@@ -230,13 +281,6 @@ server <- function(input, output, session) {
             xlab(NULL) + ylab(NULL) + theme_minimal() + coord_flip()
     }
     )  
-    
-    
-    
-    
-    
-    
-    
     
     # Model Graphs
     
