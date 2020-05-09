@@ -33,7 +33,6 @@ library(readxl)
 library(naniar)
 library(janitor)
 library(choroplethr)
-library(dbplyr)
 library(viridis)
 library(fuzzyjoin)
 library(corrplot)
@@ -41,6 +40,7 @@ library(totalcensus)
 library(devtools)
 library(choroplethrZip)
 library(ggfittext)
+library(plotly)
 
 
 # https://shiny.rstudio.com/articles/layout-guide.html
@@ -412,9 +412,10 @@ all_joined
 ```{r Depression as Dependent}
 
 score_model <- lm(depression ~ wellbeing_index + income_2016 + value_unemployment + almost_every_day_drug_med_mood + `x5_strong_agree_relationship`, data = all_joined) %>%
-  tidy(conf.int = TRUE)
+  tidy(conf.int = TRUE) %>%
+  select(term,estimate, conf.low,conf.high)
 
-score_model + gt()
+score_model %>% gt()
 
 ```
 
