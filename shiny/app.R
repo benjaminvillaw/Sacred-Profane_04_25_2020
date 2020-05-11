@@ -46,19 +46,32 @@ ui <- fluidPage(
     
     tabPanel("Overview",
             
+             
+             
                  titlePanel("Emotions: Social + Religious + Medical + Economic Factors"),
                 h4("89 Metropolitan and Micropolitan Statistical Areas in the United States in the Year 2016"),
-                         selectInput("religion_input", "Religious Variables:",
+                       
+             
+             
+             
+             tabsetPanel(type = "tabs",
+                        
+                      tabPanel("Religious", 
+                            selectInput("religion_input", "Religious Variables:",
                                      c("Is Religion Important Part of Daily Life?" = "religion_imp",
                                        "Attend Church, Synagogue, or Mosque Once Per Week" = "church_week",
                                        "Number of Religious Jobs Per 1,000" = "jobs_1000_orig_religion",
                                        "Christian" = "christian",
                                        "Jewish" = "jewish",
-                                       "Muslim" = "muslim")),
-             
-                  plotlyOutput("religion_overview"),
+                                       "Muslim" = "muslim",
+                                       " "=""
+                                       )),
+                     
+                         plotlyOutput("religion_overview", height = 1000)
+                                             ),
                                      
-                          
+             
+                        tabPanel("Social", 
                                      selectInput("social_input", "Social Variables:",
                                                  c("Social Wellbeing Index" = "wellbeing_index",
                                                    "Hours Spent Socially" = "social_hours",
@@ -67,17 +80,34 @@ ui <- fluidPage(
                                                    "Number of Social Jobs per 1,000" = "jobs_1000_orig_social"
                                                    )),  
                          
-                  plotlyOutput("social_overview"),
+                                        plotlyOutput("social_overview", height = 1000)
+                                            ),
              
+                      tabPanel("Economic", 
                          selectInput("economic_input", "Economic Variables:",
                                      c("Income 2016" = "income_2016",
                                        "Financial Well-Being" = "value_financial_well_being",
-                                       "Unemployment Rate" = "value_unemployment"
-                                     )),     
-                                     
+                                       "Unemployment Rate" = "value_unemployment",
+                                       "Republican" = "republican",
+                                       "Democrat" = "democrat",
+                                       "Independent / Other" = "independent_other"
+                                     )),  
+                        plotlyOutput("economic_overview", height = 1000)
+                      ),
+       
              
-                  plotlyOutput("economic_overview"),
-             
+                      tabPanel("Political", 
+                      selectInput("political_input", "Political Variables:",
+                         c(
+                           "Republican" = "republican",
+                           "Democrat" = "democrat",
+                           "Independent / Other" = "independent_other"
+                         )),
+                     
+             plotlyOutput("political_overview", height = 1000)
+                      ),
+            
+              tabPanel("Emotional", 
                          selectInput("emotional_input", "Emotional Variables:",
                                      c(
                                        "Happiness" = "yes_happiness",
@@ -87,8 +117,10 @@ ui <- fluidPage(
                                        "Sadness" = "yes_sadness"
                                      )),                
                                          
-                   plotlyOutput("emotional_overview"),
-               
+                   plotlyOutput("emotional_overview", height = 1000),
+             ),
+             
+             tabPanel("Medical", 
                          selectInput("medical_input", "Medical Variables:",
                                      c("Diagnosed Depression" = "depression",
                                        "Number of Psych Jobs per 1,000" = "jobs_1000_orig_psych",
@@ -96,10 +128,9 @@ ui <- fluidPage(
                                        "Sometimes Use Drugs/Medication To Affect Mood" = "sometimes_drug_med_mood",
                                        "Never Use Drugs/Medication To Affect Mood" = "never_drug_med_mood"
                                      )),          
-                          
-                    
-                         plotlyOutput("medical_overview")
-                 
+          
+                         plotlyOutput("medical_overview", height = 1000)
+             ))
              ),
                        
     tabPanel("Models",
@@ -108,10 +139,10 @@ ui <- fluidPage(
             # ),
              
              titlePanel("Correlations Between Variables"),
-            
-            plotOutput("matrix", height = 800),
            
+           plotOutput("matrix", height = 800),     
            
+           sidebarPanel(
              selectInput("variable_a", "Variable A:",
                          c("Is Religion Important Part of Daily Life?" = "religion_imp",
                              "Attend Church, Synagogue, or Mosque Once Per Week" = "church_week",
@@ -124,7 +155,11 @@ ui <- fluidPage(
                            "Hours Spent Socially" = "social_hours",
                            "Very Weak Close Relationship" = "x1_strong_disagree_relationship",
                            "Very Strong Close Relationship" = "x5_strong_agree_relationship",
-                           "Number of Social Jobs per 1,000" = "jons_1000_orig_social",
+                           "Number of Social Jobs per 1,000" = "jobs_1000_orig_social",
+                           
+                           "Republican" = "republican",
+                           "Democrat" = "democrat",
+                           "Independent / Other" = "independent_other",
              
                            "Income 2016" = "income_2016",
                            "Financial Well-Being" = "value_financial_well_being",
@@ -155,7 +190,12 @@ ui <- fluidPage(
                            "Hours Spent Socially" = "social_hours",
                            "Very Weak Close Relationship" = "x1_strong_disagree_relationship",
                            "Very Strong Close Relationship" = "x5_strong_agree_relationship",
-                           "Number of Social Jobs per 1,000" = "jons_1000_orig_social",
+                           "Number of Social Jobs per 1,000" = "jobs_1000_orig_social",
+                           
+                           "Republican" = "republican",
+                           "Democrat" = "democrat",
+                           "Independent / Other" = "independent_other",
+                           
                            
                            "Income 2016" = "income_2016",
                            "Financial Well-Being" = "value_financial_well_being",
@@ -172,8 +212,15 @@ ui <- fluidPage(
                            "Almost Everyday Use Drugs/Medication To Affect Mood" = "almost_every_day_drug_med_mood",
                            "Sometimes Use Drugs/Medication To Affect Mood" = "sometimes_drug_med_mood",
                            "Never Use Drugs/Medication To Affect Mood" = "never_drug_med_mood")),
-                           
-             plotlyOutput("correlation"),
+               
+                    
+            
+    ),
+           
+           mainPanel(
+               plotlyOutput("correlation", width = 600)
+           ),
+           
              h4(),
             h5()
             ),
@@ -181,13 +228,104 @@ ui <- fluidPage(
     tabPanel("Analysis", 
              titlePanel("Regression Table"),
              gt_output(outputId ="table"),
-             h5("The follwing regression table holds depression as a dependent variable."),
+             h5("The follwing regression table holds depression as a 
+                dependent variable and shows how income is negatively
+                correlated with having diagnosed depression, while 
+                taking a drug/medicine to enhance mood is, as expected,
+                positively correlated."),
+            
+             titlePanel("Create Your Own Regression Table"),
+             
+       sidebarPanel(
+             selectInput("dependent", "Dependent Variable:",
+                         c("Is Religion Important Part of Daily Life?" = "religion_imp",
+                           "Attend Church, Synagogue, or Mosque Once Per Week" = "church_week",
+                           "Number of Religious Jobs Per 1,000" = "jobs_1000_orig_religion",
+                           "Christian" = "christian",
+                           "Jewish" = "jewish",
+                           "Muslim" = "muslim",
+                           
+                           "Social Wellbeing Index" = "wellbeing_index",
+                           "Hours Spent Socially" = "social_hours",
+                           "Very Weak Close Relationship" = "x1_strong_disagree_relationship",
+                           "Very Strong Close Relationship" = "x5_strong_agree_relationship",
+                           "Number of Social Jobs per 1,000" = "jobs_1000_orig_social",
+                           
+                           "Republican" = "republican",
+                           "Democrat" = "democrat",
+                           "Independent / Other" = "independent_other",
+                
+                           "Income 2016" = "income_2016",
+                           "Financial Well-Being" = "value_financial_well_being",
+                           "Unemployment Rate" = "value_unemployment",
+                           
+                           "Happiness" = "yes_happiness",
+                           "Enjoyment" = "yes_enjoyment",
+                           "Worry" = "yes_worry",
+                           "Anger" = "yes_anger",
+                           "Sadness" = "yes_sadness", 
+                           
+                           "Diagnosed Depression" = "depression",
+                           "Number of Psych Jobs per 1,000" = "jobs_1000_orig_psych",
+                           "Almost Everyday Use Drugs/Medication To Affect Mood" = "almost_every_day_drug_med_mood",
+                           "Sometimes Use Drugs/Medication To Affect Mood" = "sometimes_drug_med_mood",
+                           "Never Use Drugs/Medication To Affect Mood" = "never_drug_med_mood")),
+             
+             selectInput("ind_religion", "Religious Variables:",
+                         c("Is Religion Important Part of Daily Life?" = "religion_imp",
+                           "Attend Church, Synagogue, or Mosque Once Per Week" = "church_week",
+                           "Number of Religious Jobs Per 1,000" = "jobs_1000_orig_religion",
+                           "Christian" = "christian",
+                           "Jewish" = "jewish",
+                           "Muslim" = "muslim")),
+             
+             selectInput("ind_social", "Social Variables:",
+                         c("Social Wellbeing Index" = "wellbeing_index",
+                           "Hours Spent Socially" = "social_hours",
+                           "Very Weak Close Relationship" = "x1_strong_disagree_relationship",
+                           "Very Strong Close Relationship" = "x5_strong_agree_relationship",
+                           "Number of Social Jobs per 1,000" = "jobs_1000_orig_social"
+                         )),  
+             
+             selectInput("ind_political", "Political Variables:",
+                         c( "Republican" = "republican",
+                            "Democrat" = "democrat",
+                            "Independent / Other" = "independent_other"
+                         )),  
+             
+             selectInput("ind_economic", "Economic Variables:",
+                         c("Income 2016" = "income_2016",
+                           "Financial Well-Being" = "value_financial_well_being",
+                           "Unemployment Rate" = "value_unemployment"
+                         )),     
+             
+             selectInput("ind_emotional", "Emotional Variables:",
+                         c(
+                             "Happiness" = "yes_happiness",
+                             "Enjoyment" = "yes_enjoyment",
+                             "Worry" = "yes_worry",
+                             "Anger" = "yes_anger",
+                             "Sadness" = "yes_sadness"
+                         )),         
+             
+             selectInput("ind_medical", "Medical Variables:",
+                         c("Diagnosed Depression" = "depression",
+                           "Number of Psych Jobs per 1,000" = "jobs_1000_orig_psych",
+                           "Almost Everyday Use Drugs/Medication To Affect Mood" = "almost_every_day_drug_med_mood",
+                           "Sometimes Use Drugs/Medication To Affect Mood" = "sometimes_drug_med_mood",
+                           "Never Use Drugs/Medication To Affect Mood" = "never_drug_med_mood"
+                         ))), 
+
+mainPanel(
+    gt_output(outputId ="table_variable")),
+
+
              p(),
              ),
 
     tabPanel("About", 
              titlePanel("About the Project"),
-             h5("The project attempts to examine data from 89 Metropolitan and Micropolitan 
+             h5("The project attempts to examine data from 89 Metropolitan
                 Statistical Areas in the United States in the Year 2016 to establish 
                 social, religious & medical effects on emotional wellbeing by ananlyzing differnt variables."),
              
@@ -242,7 +380,12 @@ server <- function(input, output, session) {
             filter(category == input$religion_input) %>%
             ggplot(aes(x= reorder(area_title,-value),y = value)) + geom_col(aes(fill = value)) + 
             scale_fill_viridis_c() + 
-            xlab(NULL) + ylab(NULL) + theme_minimal() + coord_flip()
+            xlab(NULL) + ylab(NULL) + theme_classic() + coord_flip()+ 
+            labs(y = "Value", fill = "Value",
+                 
+                 title = "Religious Variables in 89 Metropolitan Statistical Areas", 
+                 subtitle = "Data from Gallup Analytics + Bureau of Labor Statistics + Bureau of Economic Analysis") +
+            theme(text = element_text(size=8))
     }
     )  
     
@@ -251,7 +394,26 @@ server <- function(input, output, session) {
             filter(category == input$social_input) %>%
             ggplot(aes(x= reorder(area_title,-value),y = value)) + geom_col(aes(fill = value)) + 
             scale_fill_viridis_c() + 
-            xlab(NULL) + ylab(NULL) + theme_minimal() + coord_flip()
+            xlab(NULL) + ylab(NULL) + theme_classic() + coord_flip()+ 
+            labs(y = "Value", fill = "Value",
+                 
+                 title = "Social Variables in 89 Metropolitan Statistical Areas", 
+                 subtitle = "Data from Gallup Analytics + Bureau of Labor Statistics + Bureau of Economic Analysis")+
+            theme(text = element_text(size=8))
+    }
+    )  
+    
+    output$political_overview <- renderPlotly({
+        all_pivot %>%
+            filter(category == input$political_input) %>%
+            ggplot(aes(x= reorder(area_title,-value),y = value)) + geom_col(aes(fill = value)) + 
+            scale_fill_viridis_c() + 
+            xlab(NULL) + ylab(NULL) + theme_classic() + coord_flip()+ 
+            labs( y = "Value", fill = "Value",
+                 
+                 title = "Political Variables in 89 Metropolitan Statistical Areas", 
+                 subtitle = "Data from Gallup Analytics + Bureau of Labor Statistics + Bureau of Economic Analysis")+
+            theme(text = element_text(size=8))
     }
     )  
     
@@ -260,7 +422,12 @@ server <- function(input, output, session) {
             filter(category == input$economic_input) %>%
             ggplot(aes(x= reorder(area_title,-value),y = value)) + geom_col(aes(fill = value)) + 
             scale_fill_viridis_c() + 
-            xlab(NULL) + ylab(NULL) + theme_minimal() + coord_flip()
+            xlab(NULL) + ylab(NULL) + theme_classic() + coord_flip()+ 
+            labs( y = "Value", fill = "Value",
+                 
+                 title = "Economic Variables in 89 Metropolitan Statistical Areas", 
+                 subtitle = "Data from Gallup Analytics + Bureau of Labor Statistics + Bureau of Economic Analysis")+
+            theme(text = element_text(size=8))
     }
     )  
     
@@ -269,7 +436,12 @@ server <- function(input, output, session) {
             filter(category == input$emotional_input) %>%
             ggplot(aes(x= reorder(area_title,-value),y = value)) + geom_col(aes(fill = value)) + 
             scale_fill_viridis_c() + 
-            xlab(NULL) + ylab(NULL) + theme_minimal() + coord_flip()
+            xlab(NULL) + ylab(NULL) + theme_classic() + coord_flip()+ 
+            labs( y = "Value", fill = "Value",
+                 
+                 title = "Emotional Variables in 89 Metropolitan Statistical Areas", 
+                 subtitle = "Data from Gallup Analytics + Bureau of Labor Statistics + Bureau of Economic Analysis")+
+            theme(text = element_text(size=8))
     }
     )  
     
@@ -278,7 +450,12 @@ server <- function(input, output, session) {
             filter(category == input$medical_input) %>%
             ggplot(aes(x= reorder(area_title,-value),y = value)) + geom_col(aes(fill = value)) + 
             scale_fill_viridis_c() + 
-            xlab(NULL) + ylab(NULL) + theme_minimal() + coord_flip()
+            xlab(NULL) + ylab(NULL) + theme_classic() + coord_flip()+ 
+            labs( y = "Value", fill = "Value",
+                                                                         
+                                                                         title = "Medical Variables in 89 Metropolitan Statistical Areas", 
+                                                                         subtitle = "Data from Gallup Analytics + Bureau of Labor Statistics + Bureau of Economic Analysis")+
+            theme(text = element_text(size=8))
     }
     )  
     
@@ -288,11 +465,21 @@ server <- function(input, output, session) {
     output$correlation <- renderPlotly({
             all_joined %>%
             ggplot(aes_string(input$variable_a, input$variable_b)) + geom_point() + 
-            geom_smooth(method = "lm", formula = y ~ x, se = FALSE) + 
-            theme_classic()+
-            scale_y_log10() + scale_x_log10()
+            geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
+            scale_y_log10() + scale_x_log10() + 
+            labs(x= input$variable_a, y = input$variable_b, 
+                                                  
+                                                  title = "Emotional Well-Being: Correlation of Two Variables in \n 89 Metropolitan
+                Statistical Areas", 
+                                                  subtitle = "Data from Gallup Analytics + Bureau of Labor Statistics + Bureau of Economic Analysis") +
+            theme_classic()
+        
+        
+        
+        
     }
     )  
+    
     
     output$matrix <- renderPlot({
         corr %>%
@@ -304,11 +491,37 @@ server <- function(input, output, session) {
     # Table Discussion
     
     output$table <- render_gt({
-        lm(depression ~ wellbeing_index + income_2016 + value_unemployment + almost_every_day_drug_med_mood + `x5_strong_agree_relationship`, data = all_joined) %>%
+        lm(depression ~ income_2016 + value_unemployment + `x5_strong_agree_relationship`, data = all_joined) %>%
             tidy(conf.int = TRUE) %>%
-            select(term,estimate, conf.low,conf.high) %>% gt()
+            select(term,estimate, conf.low,conf.high) %>% gt()%>%
+            tab_header(
+                title = "Effect of Income, Unemployment, Taking a Mood Enhancing Drug/Medicine, and Having Strong Relationships on Diagnosed Depression") %>%
+            tab_spanner(label = "Data from Gallup Analytics + Bureau of Labor Statistics + Bureau of Economic Analysis", 
+                        columns = vars(term,estimate,conf.low,conf.high)) %>%
+            cols_label(term = "Variable", estimate = "Estimate", 
+                       conf.low = "Lower bound", conf.high = "Upper bound") 
+    })
     
-    
+    output$table_variable <- render_gt({
+        lm(as.formula(paste(input$dependent," ~ ",paste(c(input$ind_religion,
+                                                          input$ind_social,
+                                                          input$ind_political,
+                                                          input$ind_economic,
+                                                          input$ind_emotional,
+                                                          input$ind_medical
+                                                          ),collapse="+"))),data=all_joined) %>%
+            tidy(conf.int = TRUE) %>%
+            select(term,estimate, conf.low,conf.high) %>% gt() %>%
+            tab_header(
+                title = "Effect of Religious, Social, Economic, Emotional, and Medical Variables 
+  on A Chosen Dependant Variable") %>%
+            tab_spanner(label = "Data from Gallup Analytics + Bureau of Labor Statistics + Bureau of Economic Analysis", 
+                        columns = vars(term,estimate,conf.low,conf.high)) %>%
+            cols_label(term = "Variable", estimate = "Estimate", 
+                       conf.low = "Lower bound", conf.high = "Upper bound") 
+        
+        
+        
     })
     
 }

@@ -155,7 +155,7 @@ religion_important <- religion_important_raw %>%
 
 church_frequency <- church_frequency_raw %>%
  clean_names() %>%
-  filter(time==2010) %>%
+  filter(time==2016) %>%
   select(geography,at_least_once_a_week)
 
 depression <- depression_raw %>%
@@ -301,6 +301,50 @@ write_rds(all_joined,"shiny/all_joined.rds")
 
 ```
 
+```{r Jobs + Gallup + Income Joined}
+
+all_joined2 <-left_join(joined_gallup_income, jobs_joined, by = "area_title") %>%
+   na.omit() %>%
+   rename(c("Is Religion Important Part of Daily Life?" = "religion_imp",
+                           "Attend Church, Synagogue, or Mosque Once Per Week" = "church_week",
+                           "Number of Religious Jobs Per 1,000" = "jobs_1000_orig_religion",
+                           "Christian" = "christian",
+                           "Jewish" = "jewish",
+                           "Muslim" = "muslim",
+                           
+                           "Social Wellbeing Index" = "wellbeing_index",
+                           "Hours Spent Socially" = "social_hours",
+                           "Very Weak Close Relationship" = "x1_strong_disagree_relationship",
+                           "Very Strong Close Relationship" = "x5_strong_agree_relationship",
+                           "Number of Social Jobs per 1,000" = "jobs_1000_orig_social",
+                           
+                           "Republican" = "republican",
+                           "Democrat" = "democrat",
+                           "Independent / Other" = "independent_other",
+                
+                           "Income 2016" = "income_2016",
+                           "Financial Well-Being" = "value_financial_well_being",
+                           "Unemployment Rate" = "value_unemployment",
+                           
+                           "Happiness" = "yes_happiness",
+                           "Enjoyment" = "yes_enjoyment",
+                           "Worry" = "yes_worry",
+                           "Anger" = "yes_anger",
+                           "Sadness" = "yes_sadness", 
+                           
+                           "Diagnosed Depression" = "depression",
+                           "Number of Psych Jobs per 1,000" = "jobs_1000_orig_psych",
+                           "Almost Everyday Use Drugs/Medication To Affect Mood" = "almost_every_day_drug_med_mood",
+                           "Sometimes Use Drugs/Medication To Affect Mood" = "sometimes_drug_med_mood",
+                           "Never Use Drugs/Medication To Affect Mood" = "never_drug_med_mood"))
+  
+
+
+write_rds(all_joined,"shiny/all_joined2.rds")
+
+```
+
+
 
 ```{r Joined Pivot}
 
@@ -376,11 +420,49 @@ all_joined %>%
 ```{r Correlation Test}
 
 corr <- all_joined %>%
-  select(wellbeing_index,social_hours,religion_imp,church_week,depression,yes_sadness,no_sadness,yes_anger,no_anger,yes_worry,no_worry,yes_enjoyment,no_enjoyment,yes_happiness,no_happiness,value_financial_well_being,
-         republican,democrat,independent_other,christian,jewish,muslim,value_unemployment,almost_every_day_drug_med_mood,sometimes_drug_med_mood,rarely_drug_med_mood,never_drug_med_mood, x1_strong_disagree_relationship, x2_disagree_relationship, x3_neutral_relationship, x4_agree_relationship, x5_strong_agree_relationship,
+  select(wellbeing_index,social_hours,religion_imp,church_week,depression,yes_sadness,yes_anger,yes_worry,yes_enjoyment,yes_happiness,value_financial_well_being,
+         republican,democrat,independent_other,christian,jewish,muslim,value_unemployment,almost_every_day_drug_med_mood,sometimes_drug_med_mood,never_drug_med_mood, x1_strong_disagree_relationship, x5_strong_agree_relationship,
         
        
-         income_2016,tot_emp_social,jobs_1000_orig_social,a_mean_social,tot_emp_psych,jobs_1000_orig_psych,a_mean_psych,tot_emp_religion,jobs_1000_orig_religion,a_mean_religion) %>%
+         income_2016,jobs_1000_orig_social,jobs_1000_orig_psych,jobs_1000_orig_religion) %>%
+  rename(c("Is Religion Important Part of Daily Life?" = "religion_imp",
+                           "Attend Church, Synagogue, or Mosque Once Per Week" = "church_week",
+                           "Number of Religious Jobs Per 1,000" = "jobs_1000_orig_religion",
+                           "Christian" = "christian",
+                           "Jewish" = "jewish",
+                           "Muslim" = "muslim",
+                           
+                           "Social Wellbeing Index" = "wellbeing_index",
+                           "Hours Spent Socially" = "social_hours",
+                           "Very Weak Close Relationship" = "x1_strong_disagree_relationship",
+                           "Very Strong Close Relationship" = "x5_strong_agree_relationship",
+                           "Number of Social Jobs per 1,000" = "jobs_1000_orig_social",
+                           
+                           "Republican" = "republican",
+                           "Democrat" = "democrat",
+                           "Independent / Other" = "independent_other",
+                
+                           "Income 2016" = "income_2016",
+                           "Financial Well-Being" = "value_financial_well_being",
+                           "Unemployment Rate" = "value_unemployment",
+                           
+                           "Happiness" = "yes_happiness",
+                           "Enjoyment" = "yes_enjoyment",
+                           "Worry" = "yes_worry",
+                           "Anger" = "yes_anger",
+                           "Sadness" = "yes_sadness", 
+                           
+                           "Diagnosed Depression" = "depression",
+                           "Number of Psych Jobs per 1,000" = "jobs_1000_orig_psych",
+                           "Almost Everyday Use Drugs/Medication To Affect Mood" = "almost_every_day_drug_med_mood",
+                           "Sometimes Use Drugs/Medication To Affect Mood" = "sometimes_drug_med_mood",
+                           "Never Use Drugs/Medication To Affect Mood" = "never_drug_med_mood")
+    
+    
+    
+    
+    
+  ) %>%
 cor()
 
 write_rds(corr,"shiny/corr.rds")
